@@ -1,5 +1,4 @@
-#pragma once
-#include "../include/BytrixNot.h"
+#include "BytrixNot.h"
 #include <stdio.h>
 #include <string>
 

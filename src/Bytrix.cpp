@@ -21,9 +21,15 @@ bool check_file(std::string file_name)
 
 std::string get_file_contents(std::string file_name)
 {
+	std::string contents;
 	std::ifstream file(file_name);
-	std::string contents((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	return contents.c_str();
+	std::string line;
+	while (std::getline(file, line))
+	{
+		contents += line;
+		contents.push_back('\n');
+	}
+	return contents;
 }
 
 int main(int argc, const char **args)
@@ -37,7 +43,7 @@ int main(int argc, const char **args)
 	}
 	std::string source_code = get_file_contents(file_name);
 	BytrixNot::Success("Here are the file contents: ");
-	std::cout << source_code << "\n";
+	printf("%s", source_code);
 
 	return 0;
 }
