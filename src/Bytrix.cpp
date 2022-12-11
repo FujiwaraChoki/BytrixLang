@@ -5,6 +5,7 @@ The Interpreter for the Bytrix programming language
 #include <fstream>
 #include <string>
 #include "BytrixExceptions.h"
+#include "Syntax.cpp"
 
 bool check_file(std::string file_name)
 {
@@ -34,6 +35,7 @@ std::string get_file_contents(std::string file_name)
 
 int main(int argc, const char **args)
 {
+	Syntax syntax;
 	std::string file_name = args[1];
 	bool file_exists = check_file(file_name);
 	if (file_exists == false)
@@ -43,7 +45,6 @@ int main(int argc, const char **args)
 	}
 	std::string source_code = get_file_contents(file_name);
 	BytrixNot::Success("Here are the file contents: ");
-	printf("%s", source_code);
-
+	std::cout << source_code << std::endl;
 	return 0;
 }
