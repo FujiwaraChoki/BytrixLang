@@ -1,25 +1,31 @@
 #pragma once
-#include "BytrixNot.h"
+#include "../include/BytrixNot.h"
 #include <stdio.h>
 #include <string>
 
-class FileNotFoundError {
+class FileNotFoundError
+{
 public:
-	FileNotFoundError(std::string file_name) {
+	FileNotFoundError(std::string file_name)
+	{
 		BytrixNot::Error("FileNotFoundError: " + file_name + " does not exist.");
 	}
 };
 
-class FileNotReadableError {
+class FileNotReadableError
+{
 public:
-	FileNotReadableError(std::string file_name) {
+	FileNotReadableError(std::string file_name)
+	{
 		BytrixNot::Error("FileNotReadableError: " + file_name + " is not readable.");
 	}
 };
 
-class InvalidFileTypeError {
+class InvalidFileTypeError
+{
 public:
-	InvalidFileTypeError(std::string file_name) {
+	InvalidFileTypeError(std::string file_name)
+	{
 		BytrixNot::Error("InvalidFileTypeError: " + file_name + " is not a Bytrix (.btx) file.");
 	}
 };

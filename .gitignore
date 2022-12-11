@@ -366,3 +366,4 @@ FodyWeavers.xsd
 *.vcxproj
 *.filters
 *.user
+*.vscode/
