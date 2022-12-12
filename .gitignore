@@ -371,3 +371,4 @@ FodyWeavers.xsd
 *.exe
 *.elf
 *.bin
+*.gitattributes
