@@ -37,3 +37,12 @@ public:
 		BytrixNot::Error("InvalidStringError: " + string + " is not a valid string.");
 	}
 };
+
+class UndefinedVariableError
+{
+public:
+	UndefinedVariableError(std::string variable)
+	{
+		BytrixNot::Error("UndefinedVariableError: " + variable + " is not defined.");
+	}
+};

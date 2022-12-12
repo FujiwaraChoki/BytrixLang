@@ -30,30 +30,11 @@ public:
     // Map of integer variables
     std::map<std::string, int> int_variables;
 
-    template<typename T>
-    bool check_is_number(T arg) {
+    template <typename T>
+    bool check_is_number(T arg)
+    {
         // Check if the argument is a number.
         if (std::is_same<T, int>::value || std::is_same<T, float>::value || std::is_same<T, double>::value || std::is_same<T, long>::value || std::is_same<T, long long>::value || std::is_same<T, short>::value || std::is_same<T, long double>::value)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    bool check_is_bool(std::string arg)
-    {
-        // Check if the argument is a boolean.
-        if (arg == "true" || arg == "false")
-        {
-            return true;
-        }
-        return false;
-    }
-
-    bool check_which_bool(std::string arg)
-    {
-        // Check which boolean the argument is.
-        if (arg == "true")
         {
             return true;
         }
@@ -128,44 +109,61 @@ public:
             {
                 if (words[i] == "print")
                 {
-                    //std::cout << "Found a print statement!" << std::endl;
+                    std::string what_to_print = "";
 
-                    // Check if the next word is a string
-                    if (words[i + 1][0] == '"' && words[i + 1][words[i + 1].size() - 1] == '"')
+                    // Set the what_to_print variable to the next word without the ""
+                    what_to_print = words[i + 1].substr(1, words[i + 1].size() - 2);
+
+                    // Check if next word is a variable
+                    if (words[i + 2][0] == '$')
                     {
-                        // Check if the next word is a variable
-                        if (string_variables.find(words[i + 2]) != string_variables.end())
+                        std::string var_name = words[i + 2].substr(1, words[i + 2].size() - 1);
+                        // Check if the variable is a string
+                        if (string_variables.find(var_name) != string_variables.end())
                         {
-                            // The next word is a variable, so print the value of the variable.
-                            std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << string_variables[words[i + 2]] << std::endl;
+                            // The variable is a string
+                            what_to_print += string_variables[var_name];
                         }
-                        else if (double_variables.find(words[i + 2]) != double_variables.end())
+                        // Check if the variable is a number
+                        else if (double_variables.find(var_name) != double_variables.end())
                         {
-                            // The next word is a variable, so print the value of the variable.
-                            std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << double_variables[words[i + 2]] << std::endl;
+                            // The variable is a number
+                            what_to_print += std::to_string(double_variables[var_name]);
                         }
+                        // Check if the variable is a boolean
                         else if (bool_variables.find(words[i + 2]) != bool_variables.end())
                         {
-                            // The next word is a variable, so print the value of the variable.
-                            std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << bool_variables[words[i + 2]] << std::endl;
+                            // The variable is a boolean
+                            if (bool_variables[words[i + 2]])
+                            {
+                                what_to_print += "true";
+                            }
+                            else
+                            {
+                                what_to_print += "false";
+                            }
                         }
+                        // Check if the variable is an integer
                         else if (int_variables.find(words[i + 2]) != int_variables.end())
                         {
-                            // The next word is a variable, so print the value of the variable.
-                            std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << int_variables[words[i + 2]] << std::endl;
+                            // The variable is an integer
+                            what_to_print += std::to_string(int_variables[var_name]);
                         }
                         else
                         {
-                            // The next word is not a string or a variable, so throw an error.
-                        std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << std::endl;
+                            // Throw Undefined variable error
+                            throw new UndefinedVariableError(var_name);
                         }
-                        // Print next word without ""
                     }
                     else
                     {
-                        throw InvalidStringError(words[i + 1]);
+                        // The next word is a string
+                        what_to_print = words[i + 1].substr(1, words[i + 1].size() - 2);
                     }
-                } else if(words[i] == "input") {
+                    std::cout << what_to_print << std::endl;
+                }
+                else if (words[i] == "input")
+                {
                     // Get the prompt, which is the next word.
                     std::string prompt = words[i + 1].substr(1, words[i + 1].size() - 2);
                     // Get the variable name, which is the word after the prompt.
@@ -206,7 +204,8 @@ public:
     }
 
     // Print out all variables.
-    void print_variables()
+    void
+    print_variables()
     {
         // Print out all string variables.
         for (auto it = string_variables.begin(); it != string_variables.end(); it++)
