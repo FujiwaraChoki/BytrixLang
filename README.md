@@ -6,4 +6,12 @@ Bytrix is an interpreted programming language that is designed to be easy to lea
 
 ### Windows
 
-Download the latest release from [here](https://github.com/FujiwaraChoki/BytrixLang/releases/latest) and extract it. Then, add the path to the `bin` folder to your `PATH` environment variable.
+1. Download the latest release from [here](https://github.com/FujiwaraChoki/BytrixLang/releases/tag/latest_windows).
+2. Move binary to your `C:\Windows` folder.
+3. Run `setx path "%path%;C:\Windows"` to add the binary to your path.
+
+### Linux
+
+1. Download the latest release from [here](https://github.com/FujiwaraChoki/BytrixLang/releases/tag/latest_linux).
+2. Move binary to your `/usr/local/bin` folder.
+3. Run `chmod +x /usr/local/bin/bytrix` to make it executable.

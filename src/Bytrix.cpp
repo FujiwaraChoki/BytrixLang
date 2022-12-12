@@ -1,5 +1,7 @@
 /*
 The Interpreter for the Bytrix programming language
+Author: Sami Hindi
+Version: 0.0.1
 */
 #include <iostream>
 #include <fstream>
@@ -35,6 +37,7 @@ std::string get_file_contents(std::string file_name)
 
 int main(int argc, const char **args)
 {
+	BytrixNot::Info("Bytrix Interpreter v0.0.1");
 	Syntax syntax;
 	std::string file_name = args[1];
 	bool file_exists = check_file(file_name);

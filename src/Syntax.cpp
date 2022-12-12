@@ -7,15 +7,11 @@
 
 class Syntax
 {
-    // This class is used to store the syntax of a language.
-    // It is used to check if a given string is valid syntax.
-    // It is also used to check if a given string is valid syntax for a given language.
-
 public:
-    // The constructor for the Syntax class.
-    explicit Syntax(){}; // This is the default constructor.
+    // Default constructor, do nothing once instantiated (yet)
+    explicit Syntax(){};
 
-    // The destructor for the Syntax class.
+    // Destructor
     ~Syntax(){};
 
     std::vector<std::string> syntax = {"for", "while", "if", "else", "elif", "switch", "case", "break", "continue", "return", "print", "this", "true", "false"};
