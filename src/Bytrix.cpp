@@ -4,7 +4,7 @@ The Interpreter for the Bytrix programming language
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "BytrixExceptions.h"
+#include "../include/BytrixExceptions.h"
 #include "Syntax.cpp"
 
 bool check_file(std::string file_name)

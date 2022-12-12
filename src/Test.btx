@@ -4,3 +4,6 @@ print "Hello " $name
 
 input "What is your age? " age
 print "You are " $age " years old." 
+
+input "What is your favorite color? " color
+print "Your favorite color is " $color
