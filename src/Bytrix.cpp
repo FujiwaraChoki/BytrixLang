@@ -49,6 +49,6 @@ int main(int argc, const char **args)
 	syntax.parse(source_code);
 
 	// Print all variables
-	syntax.print_variables();
+	//syntax.print_variables();
 	return 0;
 }

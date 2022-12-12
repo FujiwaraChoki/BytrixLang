@@ -133,8 +133,33 @@ public:
                     // Check if the next word is a string
                     if (words[i + 1][0] == '"' && words[i + 1][words[i + 1].size() - 1] == '"')
                     {
-                        // Print next word without ""
+                        // Check if the next word is a variable
+                        if (string_variables.find(words[i + 2]) != string_variables.end())
+                        {
+                            // The next word is a variable, so print the value of the variable.
+                            std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << string_variables[words[i + 2]] << std::endl;
+                        }
+                        else if (double_variables.find(words[i + 2]) != double_variables.end())
+                        {
+                            // The next word is a variable, so print the value of the variable.
+                            std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << double_variables[words[i + 2]] << std::endl;
+                        }
+                        else if (bool_variables.find(words[i + 2]) != bool_variables.end())
+                        {
+                            // The next word is a variable, so print the value of the variable.
+                            std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << bool_variables[words[i + 2]] << std::endl;
+                        }
+                        else if (int_variables.find(words[i + 2]) != int_variables.end())
+                        {
+                            // The next word is a variable, so print the value of the variable.
+                            std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << int_variables[words[i + 2]] << std::endl;
+                        }
+                        else
+                        {
+                            // The next word is not a string or a variable, so throw an error.
                         std::cout << words[i + 1].substr(1, words[i + 1].size() - 2) << std::endl;
+                        }
+                        // Print next word without ""
                     }
                     else
                     {
