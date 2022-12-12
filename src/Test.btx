@@ -1,2 +1,3 @@
 main:
-print "Hallo Ben" 
+print "Hello, World"
+input "What is your Name?" name

@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <map>
 
 class Syntax
 {
@@ -17,14 +18,44 @@ public:
 
     std::vector<std::string> syntax = {"for", "while", "if", "else", "elif", "switch", "case", "break", "continue", "return", "print", "this", "true", "false"};
 
-    bool checkKeyword(std::string keyword)
-    {
-        for (int i = 0; i < this->syntax.size(); i++)
+    // Map of the string variables
+    std::map<std::string, std::string> string_variables;
+
+    // Map of the number variables
+    std::map<std::string, double> double_variables;
+
+    // Map of the boolean variables
+    std::map<std::string, bool> bool_variables;
+
+    // Map of integer variables
+    std::map<std::string, int> int_variables;
+
+    template<typename T>
+    bool check_is_number(T arg) {
+        // Check if the argument is a number.
+        if (std::is_same<T, int>::value || std::is_same<T, float>::value || std::is_same<T, double>::value || std::is_same<T, long>::value || std::is_same<T, long long>::value || std::is_same<T, short>::value || std::is_same<T, long double>::value)
         {
-            if (keyword == syntax[i])
-            {
-                return true;
-            }
+            return true;
+        }
+        return false;
+    }
+
+    bool check_is_bool(std::string arg)
+    {
+        // Check if the argument is a boolean.
+        if (arg == "true" || arg == "false")
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool check_which_bool(std::string arg)
+    {
+        // Check which boolean the argument is.
+        if (arg == "true")
+        {
+            return true;
         }
         return false;
     }
@@ -109,8 +140,65 @@ public:
                     {
                         throw InvalidStringError(words[i + 1]);
                     }
+                } else if(words[i] == "input") {
+                    // Get the prompt, which is the next word.
+                    std::string prompt = words[i + 1].substr(1, words[i + 1].size() - 2);
+                    // Get the variable name, which is the word after the prompt.
+                    std::string variable_name = words[i + 2];
+
+                    // Print the prompt.
+                    std::cout << prompt << std::endl;
+
+                    // Get the input.
+                    std::string input;
+                    std::cin >> input;
+
+                    // Check if the input is a number.
+                    if (check_is_number(input))
+                    {
+                        // The input is a number, so we need to convert it to a number.
+                        // Check if the input is an integer.
+                        if (input.find('.') == std::string::npos)
+                        {
+                            // The input is an integer.
+                            int input_int = std::stoi(input);
+                            int_variables[variable_name] = input_int;
+                        }
+                        else
+                        {
+                            // The input is a double.
+                            double_variables[variable_name] = std::stod(input);
+                        }
+                    }
+                    else
+                    {
+                        // Store string in memory
+                        string_variables[variable_name] = input;
+                    }
                 }
             }
+        }
+    }
+
+    // Print out all variables.
+    void print_variables()
+    {
+        // Print out all string variables.
+        for (auto it = string_variables.begin(); it != string_variables.end(); it++)
+        {
+            std::cout << it->first << " = " << it->second << std::endl;
+        }
+
+        // Print out all double variables.
+        for (auto it = double_variables.begin(); it != double_variables.end(); it++)
+        {
+            std::cout << it->first << " = " << it->second << std::endl;
+        }
+
+        // Print out all int variables.
+        for (auto it = int_variables.begin(); it != int_variables.end(); it++)
+        {
+            std::cout << it->first << " = " << it->second << std::endl;
         }
     }
 };
