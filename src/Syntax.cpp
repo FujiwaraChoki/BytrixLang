@@ -131,16 +131,16 @@ public:
         // Now, we need to check if the words are valid syntax.
         if (words[0] == "main:")
         {
-            // Check if the last word is "end"
             // Search for a print statement
             for (int i = 0; i < words.size(); i++)
             {
+                //std::cout << "Word: " << words[i] << std::endl;
                 if (words[i] == "print")
                 {
                     std::string what_to_print = "";
 
                     // Set the what_to_print variable to the next word without the ""
-                    what_to_print = words[i + 1].substr(1, words[i + 1].size() - 2);
+                    what_to_print += words[i + 1].substr(1, words[i + 1].size() - 2);
 
                     // Check if next word is a variable
                     if (words[i + 2][0] == '$')
@@ -179,17 +179,57 @@ public:
                             // The variable is an integer
                             what_to_print += std::to_string(int_variables[var_name]);
                         }
-                        else
-                        {
-                            // Throw Undefined variable error
-                            throw new UndefinedVariableError(var_name);
-                        }
                     }
-                    else
+                    // Check if there is a next word
+                    int current_index = i + 3;
+                    while (words[current_index][0] == '$' || words[current_index][0] == '"')
                     {
-                        // The next word is a string
-                        what_to_print = words[i + 1].substr(1, words[i + 1].size() - 2);
+                        // Check if the next word is a variable
+                        if (words[current_index][0] == '$')
+                        {
+                            std::string var_name = words[current_index].substr(1, words[current_index].size() - 1);
+                            // Check if the variable is a string
+                            // Call check_is_variable function and assign the result to a variable
+                            std::string variable_type = check_is_variable(var_name);
+                            if (variable_type == "string")
+                            {
+                                // The variable is a string
+                                what_to_print += string_variables[var_name];
+                            }
+                            // Check if the variable is a double
+                            else if (variable_type == "double")
+                            {
+                                // The variable is a double
+                                what_to_print += std::to_string(double_variables[var_name]);
+                            }
+                            // Check if the variable is a boolean
+                            else if (variable_type == "bool")
+                            {
+                                // The variable is a boolean
+                                if (bool_variables[words[current_index]])
+                                {
+                                    what_to_print += "true";
+                                }
+                                else
+                                {
+                                    what_to_print += "false";
+                                }
+                            }
+                            // Check if the variable is an integer
+                            else if (variable_type == "int")
+                            {
+                                // The variable is an integer
+                                what_to_print += std::to_string(int_variables[var_name]);
+                            }
+                        }
+                        // Check if the next word is a string
+                        else if (words[current_index][0] == '"')
+                        {
+                            what_to_print += words[current_index].substr(1, words[current_index].size() - 2);
+                        }
+                        current_index++;
                     }
+                    // Print the what_to_print variable
                     std::cout << what_to_print << std::endl;
                 }
                 else if (words[i] == "input")

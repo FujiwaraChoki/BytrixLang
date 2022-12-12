@@ -1,3 +1,6 @@
 main:
 input "What is your name? " name
 print "Hello " $name
+
+input "What is your age? " age
+print "You are " $age " years old." 
