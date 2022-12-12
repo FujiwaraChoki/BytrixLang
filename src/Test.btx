@@ -1,3 +1,5 @@
 main: 
 name = "Sami" 
 print "Name: " $name 
+
+;This is a comment, a comment is ignored by the interpreter;

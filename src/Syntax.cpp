@@ -73,13 +73,21 @@ public:
     {
         // This function is used to parse the source code.
         // Split the source code into words (seperated by space).
+
+        // Take out all the comments, they start with a ; and end with a ;
         std::vector<std::string> words;
         std::string word = "";
         std::string current_string = "";
         for (int i = 0; i < source_code.size(); i++)
         {
+            if(source_code[i] == ';') {
+                // We are in a comment, so we need to find the end of the comment.
+                while(source_code[i] != ';') {
+                    i++;
+                }
+            }
             // Check if the character is a ", if yes, then we are in a string and we need to add the character to the current string until we find another ".
-            if (source_code[i] == '"')
+            else if (source_code[i] == '"')
             {
                 // Check if the current string is empty, if yes, then we are starting a string.
                 if (current_string == "")
