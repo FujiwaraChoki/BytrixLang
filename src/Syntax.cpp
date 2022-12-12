@@ -134,7 +134,7 @@ public:
             // Search for a print statement
             for (int i = 0; i < words.size(); i++)
             {
-                //std::cout << "Word: " << words[i] << std::endl;
+                // std::cout << "Word: " << words[i] << std::endl;
                 if (words[i] == "print")
                 {
                     std::string what_to_print = "";
@@ -267,6 +267,42 @@ public:
                     {
                         // Store string in memory
                         string_variables[variable_name] = input;
+                    }
+                }
+                else if (words[i] == "=")
+                {
+                    std::string variable_name = words[i - 1];
+                    std::string variable_value = words[i + 1];
+
+                    // Check if the variable is a string
+                    std::string variable_type = check_is_variable(variable_name);
+
+                    if (variable_type == "")
+                    {
+                        // Check what type the variable is
+                        if (variable_value[0] == '"')
+                        {
+                            // The variable is a string
+                            string_variables[variable_name] = variable_value.substr(1, variable_value.size() - 2);
+                        }
+                        else if (check_is_number(variable_value))
+                        {
+                            // The variable is a number
+                            if (variable_value.find('.') == std::string::npos)
+                            {
+                                // The variable is an integer
+                                int_variables[variable_name] = std::stoi(variable_value);
+                            }
+                            else
+                            {
+                                // The variable is a double
+                                double_variables[variable_name] = std::stod(variable_value);
+                            }
+                        }
+                        else if (variable_value == "true" || variable_value == "false")
+                        {
+                            bool_variables[variable_name] = (variable_value == "true");
+                        }
                     }
                 }
             }
