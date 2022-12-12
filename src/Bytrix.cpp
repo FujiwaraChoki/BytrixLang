@@ -44,7 +44,8 @@ int main(int argc, const char **args)
 		return 0;
 	}
 	std::string source_code = get_file_contents(file_name);
-	BytrixNot::Success("Here are the file contents: ");
-	std::cout << source_code << std::endl;
+
+	// Parse the source code
+	syntax.parse(source_code);
 	return 0;
 }

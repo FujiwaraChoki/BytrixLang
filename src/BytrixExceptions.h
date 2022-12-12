@@ -29,4 +29,11 @@ public:
 	}
 };
 
-/*Why am I getting error, that BytrixNot::Error was already defined?*/
+class InvalidStringError
+{
+public:
+	InvalidStringError(std::string string)
+	{
+		BytrixNot::Error("InvalidStringError: " + string + " is not a valid string.");
+	}
+};
