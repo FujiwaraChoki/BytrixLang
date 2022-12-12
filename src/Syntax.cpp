@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <array>
+#include <string>
 
 class Syntax
 {
@@ -11,7 +13,7 @@ class Syntax
 
 public:
     // The constructor for the Syntax class.
-    Syntax(){}; // This is the default constructor.
+    explicit Syntax(){}; // This is the default constructor.
 
     // The destructor for the Syntax class.
     ~Syntax(){};
@@ -39,6 +41,32 @@ public:
             return true;
         }
         return false;
+    }
+
+    // Function to check whether a given string is a variable
+    std::string check_is_variable(std::string var_name)
+    {
+        // Check if the variable is a string variable
+        if (string_variables.find(var_name) != string_variables.end())
+        {
+            return "string";
+        }
+        else if (double_variables.find(var_name) != double_variables.end())
+        {
+            return "double";
+        }
+        else if (bool_variables.find(var_name) != bool_variables.end())
+        {
+            return "bool";
+        }
+        else if (int_variables.find(var_name) != int_variables.end())
+        {
+            return "int";
+        }
+        else
+        {
+            return "";
+        }
     }
 
     void parse(std::string source_code)
@@ -119,19 +147,21 @@ public:
                     {
                         std::string var_name = words[i + 2].substr(1, words[i + 2].size() - 1);
                         // Check if the variable is a string
-                        if (string_variables.find(var_name) != string_variables.end())
+                        // Call check_is_variable function and assign the result to a variable
+                        std::string variable_type = check_is_variable(var_name);
+                        if (variable_type == "string")
                         {
                             // The variable is a string
                             what_to_print += string_variables[var_name];
                         }
-                        // Check if the variable is a number
-                        else if (double_variables.find(var_name) != double_variables.end())
+                        // Check if the variable is a double
+                        else if (variable_type == "double")
                         {
-                            // The variable is a number
+                            // The variable is a double
                             what_to_print += std::to_string(double_variables[var_name]);
                         }
                         // Check if the variable is a boolean
-                        else if (bool_variables.find(words[i + 2]) != bool_variables.end())
+                        else if (variable_type == "bool")
                         {
                             // The variable is a boolean
                             if (bool_variables[words[i + 2]])
@@ -144,7 +174,7 @@ public:
                             }
                         }
                         // Check if the variable is an integer
-                        else if (int_variables.find(words[i + 2]) != int_variables.end())
+                        else if (variable_type == "int")
                         {
                             // The variable is an integer
                             what_to_print += std::to_string(int_variables[var_name]);
@@ -204,8 +234,7 @@ public:
     }
 
     // Print out all variables.
-    void
-    print_variables()
+    void print_variables()
     {
         // Print out all string variables.
         for (auto it = string_variables.begin(); it != string_variables.end(); it++)
