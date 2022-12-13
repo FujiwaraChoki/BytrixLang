@@ -29,3 +29,20 @@ bytrix <file name>
 1. Download the latest release from [here](https://github.com/FujiwaraChoki/BytrixLang/releases/tag/latest_linux).
 2. Move binary to your `/usr/local/bin` folder.
 3. Run `chmod +x /usr/local/bin/bytrix` to make it executable.
+
+## Examples
+
+### Hello World
+
+```bytrix
+/* Hello World in Bytrix */
+print "Hello World"
+```
+
+### Ask user their name and print it
+
+```bytrix
+/* Ask user their name and print it */
+input "What is your name? " name
+print "Hello " $name "! Nice to meet you!"
+```
