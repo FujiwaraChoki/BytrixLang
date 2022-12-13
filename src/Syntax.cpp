@@ -333,5 +333,11 @@ public:
         {
             std::cout << it->first << " = " << it->second << std::endl;
         }
+
+        // Print out all bool variables.
+        for (auto it = bool_variables.begin(); it != bool_variables.end(); it++)
+        {
+            std::cout << it->first << " = " << it->second << std::endl;
+        }
     }
 };

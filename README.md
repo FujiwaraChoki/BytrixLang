@@ -2,6 +2,20 @@
 
 Bytrix is an interpreted programming language that is designed to be easy to learn and use. It is a dynamically typed language, which means that you don't have to declare the type of a variable before using it. Bytrix is also a garbage collected language, which means that you don't have to worry about memory management.
 
+## Usage
+
+### Windows
+
+```cmd
+bytrix <file name>
+```
+
+### Linux
+
+```bash
+./bytrix <file name>
+```
+
 ## Installation
 
 ### Windows
