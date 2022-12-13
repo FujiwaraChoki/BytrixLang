@@ -264,12 +264,20 @@ public:
             else if (words[i] == "input")
             {
                 // Get the prompt, which is the next word.
-                std::string prompt = words[i + 1].substr(1, words[i + 1].size() - 2);
+                std::string prompt = "";
+                // Check if prompt starts with " or '
+                if (words[i + 1][0] == '"' || words[i + 1][0] == '\'')
+                {
+                    prompt = words[i + 1].substr(1, words[i + 1].size() - 2);
+                }
                 // Get the variable name, which is the word after the prompt.
                 std::string variable_name = words[i + 2];
 
-                // Print the prompt.
-                std::cout << prompt << std::endl;
+                // Print the prompt only if it isn't ""
+                if (prompt != "")
+                {
+                    std::cout << prompt << std::endl;
+                }
 
                 // Get the input.
                 std::string input;
