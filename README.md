@@ -36,13 +36,13 @@ bytrix <file name>
 
 ```bytrix
 /* Hello World in Bytrix */
-print "Hello World"
+output "Hello World"
 ```
 
-### Ask user their name and print it
+### Ask user their name and output it
 
 ```bytrix
-/* Ask user their name and print it */
+/* Ask user their name and output it */
 input "What is your name? " name
-print "Hello " $name "! Nice to meet you!"
+output "Hello " $name "! Nice to meet you!"
 ```
