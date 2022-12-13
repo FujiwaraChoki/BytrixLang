@@ -1,6 +1,5 @@
 /* This is a comment */
-input name -p "What is your name? " 
-output "Hello, $name how are you?"
 
+input name -p "What is your name? " -n
 input age -p "How old are you? " -n
-output "You are $age years old."
+output "$name is $age years old."
