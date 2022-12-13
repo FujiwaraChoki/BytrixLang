@@ -1,6 +1,6 @@
 /* This is a comment */
-input "What is your name" name
-output "Hello, " $name ", how are you?"
-/* You can leave the prompt empty */
-input "" feeling
-output "I'm glad you are feeling " $feeling "!"
+input name -p "What is your name? " 
+output "Hello, $name how are you?"
+
+input age -p "How old are you? " -n
+output "You are $age years old."

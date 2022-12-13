@@ -1,4 +1,4 @@
-/*Bytrix Notification NameSpace*/
+/*Bytrix Notification namespace*/
 #include <iostream>
 #include <string>
 

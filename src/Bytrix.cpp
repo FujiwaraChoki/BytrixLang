@@ -35,6 +35,19 @@ std::string get_file_contents(std::string file_name)
 	return contents;
 }
 
+// Remove the comments from source_code, they start with /* and end with */,
+// if /* and */ were found in the source code
+std::string filter(std::string source_code)
+{
+	if (source_code.find("/*") != std::string::npos && source_code.find("*/") != std::string::npos)
+	{
+		// Remove the comments from source_code
+		source_code.erase(source_code.find("/*"), source_code.find("*/") - source_code.find("/*") + 2);
+	}
+
+	return source_code;
+}
+
 int main(int argc, const char **args)
 {
 	BytrixNot::Info("Bytrix Interpreter v0.0.1");
@@ -49,19 +62,14 @@ int main(int argc, const char **args)
 	}
 	source_code = get_file_contents(file_name);
 
-	// Remove the comments from source_code, they start with /* and end with */,
-	// if /* and */ were found in the source code
-	if (source_code.find("/*") != std::string::npos && source_code.find("*/") != std::string::npos)
-	{
-		// Remove the comments from source_code
-		source_code.erase(source_code.find("/*"), source_code.find("*/") - source_code.find("/*") + 2);
-	}
+	// Filter the source_code
+	source_code = filter(source_code);
 
 	// Parse the source code
 	syntax.parse(source_code);
 
 	// Print all variables
-	//syntax.print_variables();
+	// syntax.print_variables();
 
 	return 0;
 }

@@ -46,3 +46,12 @@ public:
 		BytrixNot::Error("UndefinedVariableError: " + variable + " is not defined.");
 	}
 };
+
+class InvalidVariableReferenceError
+{
+public:
+	InvalidVariableReferenceError(std::string variable)
+	{
+		BytrixNot::Error("InvalidVariableReferenceError: " + variable + " is not a valid variable.");
+	}
+};
