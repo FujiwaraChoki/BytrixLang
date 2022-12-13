@@ -186,7 +186,7 @@ public:
                     }
                     // Check if there is a next word
                     int current_index = i + 3;
-                    while (words[current_index][0] == '$' || words[current_index][0] == '"')
+                    while (words[current_index][0] == '$' || words[current_index][0] == '"' || words[current_index][0] == '\'')
                     {
                         // Check if the next word is a variable
                         if (words[current_index][0] == '$')
@@ -227,7 +227,7 @@ public:
                             }
                         }
                         // Check if the next word is a string
-                        else if (words[current_index][0] == '"')
+                        else if (words[current_index][0] == '"' || words[current_index][0] == '\'')
                         {
                             what_to_print += words[current_index].substr(1, words[current_index].size() - 2);
                         }
@@ -284,7 +284,7 @@ public:
                     if (variable_type == "")
                     {
                         // Check what type the variable is
-                        if (variable_value[0] == '"')
+                        if (variable_value[0] == '"' || variable_value[0] == '\'')
                         {
                             // The variable is a string
                             string_variables[variable_name] = variable_value.substr(1, variable_value.size() - 2);

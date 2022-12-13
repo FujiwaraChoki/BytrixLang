@@ -39,6 +39,7 @@ int main(int argc, const char **args)
 {
 	BytrixNot::Info("Bytrix Interpreter v0.0.1");
 	Syntax syntax;
+	std::string source_code;
 	std::string file_name = args[1];
 	bool file_exists = check_file(file_name);
 	if (file_exists == false)
@@ -46,12 +47,13 @@ int main(int argc, const char **args)
 		throw FileNotFoundError(file_name);
 		return 0;
 	}
-	std::string source_code = get_file_contents(file_name);
+	source_code = get_file_contents(file_name);
 
 	// Parse the source code
 	syntax.parse(source_code);
 
 	// Print all variables
-	//syntax.print_variables();
+	syntax.print_variables();
+
 	return 0;
 }
