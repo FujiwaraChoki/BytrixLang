@@ -1,6 +1,5 @@
-name = "Sami"
-age = 16
-print "Your name is " $name
-print "Your age is " $age
-what_is_ben = "Baen"
-print "Ben is " $what_is_ben
+/* This is a comment */
+input "What is your name" name
+print "Hello, " $name ", how are you?"
+input "" feeling
+print "I'm glad you are feeling " $feeling "!"
