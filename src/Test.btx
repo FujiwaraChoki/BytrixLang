@@ -1,6 +1,6 @@
-main:
 name = "Sami"
-age = "16"
+age = 16
 print "Your name is " $name
-
-;This is a comment, a comment is ignored by the interpreter;
+print "Your age is " $age
+what_is_ben = "Baen"
+print "Ben is " $what_is_ben

@@ -40,7 +40,7 @@ public:
     }
 
     // Function to check whether a given string is a variable
-    std::string check_is_variable(std::string var_name)
+    std::string get_existing_variable_name(std::string var_name)
     {
         // Check if the variable is a string variable
         if (string_variables.find(var_name) != string_variables.end())
@@ -65,6 +65,33 @@ public:
         }
     }
 
+    // Function to check which type a variable is
+    template <typename T>
+    std::string get_type(T var)
+    {
+        // Check if var begins and ends with a " or '
+        if (var[0] == '"' && var[var.size() - 1] == '"' || var[0] == '\'' && var[var.size() - 1] == '\'')
+        {
+            return "string";
+        }
+        else if (check_is_number(std::stod(var)))
+        {
+            return "double";
+        }
+        else if (check_is_number(std::stoi(var)))
+        {
+            return "int";
+        }
+        else if (var == "true" || var == "false")
+        {
+            return "bool";
+        }
+        else
+        {
+            return "";
+        }
+    }
+
     void parse(std::string source_code)
     {
         // This function is used to parse the source code.
@@ -76,9 +103,11 @@ public:
         std::string current_string = "";
         for (int i = 0; i < source_code.size(); i++)
         {
-            if(source_code[i] == ';') {
+            if (source_code[i] == ';')
+            {
                 // We are in a comment, so we need to find the end of the comment.
-                while(source_code[i] != ';') {
+                while (source_code[i] != ';')
+                {
                     i++;
                 }
             }
@@ -132,27 +161,65 @@ public:
             }
         }
 
-        // Now, we need to check if the words are valid syntax.
-        if (words[0] == "main:")
+        // Search for a print statement
+        for (int i = 0; i < words.size(); i++)
         {
-            // Search for a print statement
-            for (int i = 0; i < words.size(); i++)
+            if (words[i] == "print")
             {
-                // std::cout << "Word: " << words[i] << std::endl;
-                if (words[i] == "print")
+                std::string what_to_print = "";
+
+                // Set the what_to_print variable to the next word without the ""
+                what_to_print += words[i + 1].substr(1, words[i + 1].size() - 2);
+
+                // Check if next word is a variable
+                if (words[i + 2][0] == '$')
                 {
-                    std::string what_to_print = "";
-
-                    // Set the what_to_print variable to the next word without the ""
-                    what_to_print += words[i + 1].substr(1, words[i + 1].size() - 2);
-
-                    // Check if next word is a variable
-                    if (words[i + 2][0] == '$')
+                    std::string var_name = words[i + 2].substr(1, words[i + 2].size() - 1);
+                    // Check if the variable is a string
+                    // Call get_existing_variable_name function and assign the result to a variable
+                    std::string variable_type = get_existing_variable_name(var_name);
+                    if (variable_type == "string")
                     {
-                        std::string var_name = words[i + 2].substr(1, words[i + 2].size() - 1);
+                        // The variable is a string
+                        what_to_print += string_variables[var_name];
+                    }
+                    // Check if the variable is a double
+                    else if (variable_type == "double")
+                    {
+                        // The variable is a double
+                        what_to_print += std::to_string(double_variables[var_name]);
+                    }
+                    // Check if the variable is a boolean
+                    else if (variable_type == "bool")
+                    {
+                        // The variable is a boolean
+                        if (bool_variables[words[i + 2]])
+                        {
+                            what_to_print += "true";
+                        }
+                        else
+                        {
+                            what_to_print += "false";
+                        }
+                    }
+                    // Check if the variable is an integer
+                    else if (variable_type == "int")
+                    {
+                        // The variable is an integer
+                        what_to_print += std::to_string(int_variables[var_name]);
+                    }
+                }
+                // Check if there is a next word
+                int current_index = i + 3;
+                while (words[current_index][0] == '$' || words[current_index][0] == '"' || words[current_index][0] == '\'')
+                {
+                    // Check if the next word is a variable
+                    if (words[current_index][0] == '$')
+                    {
+                        std::string var_name = words[current_index].substr(1, words[current_index].size() - 1);
                         // Check if the variable is a string
-                        // Call check_is_variable function and assign the result to a variable
-                        std::string variable_type = check_is_variable(var_name);
+                        // Call get_existing_variable_name function and assign the result to a variable
+                        std::string variable_type = get_existing_variable_name(var_name);
                         if (variable_type == "string")
                         {
                             // The variable is a string
@@ -168,7 +235,7 @@ public:
                         else if (variable_type == "bool")
                         {
                             // The variable is a boolean
-                            if (bool_variables[words[i + 2]])
+                            if (bool_variables[words[current_index]])
                             {
                                 what_to_print += "true";
                             }
@@ -184,129 +251,84 @@ public:
                             what_to_print += std::to_string(int_variables[var_name]);
                         }
                     }
-                    // Check if there is a next word
-                    int current_index = i + 3;
-                    while (words[current_index][0] == '$' || words[current_index][0] == '"' || words[current_index][0] == '\'')
+                    // Check if the next word is a string
+                    else if (words[current_index][0] == '"' || words[current_index][0] == '\'')
                     {
-                        // Check if the next word is a variable
-                        if (words[current_index][0] == '$')
-                        {
-                            std::string var_name = words[current_index].substr(1, words[current_index].size() - 1);
-                            // Check if the variable is a string
-                            // Call check_is_variable function and assign the result to a variable
-                            std::string variable_type = check_is_variable(var_name);
-                            if (variable_type == "string")
-                            {
-                                // The variable is a string
-                                what_to_print += string_variables[var_name];
-                            }
-                            // Check if the variable is a double
-                            else if (variable_type == "double")
-                            {
-                                // The variable is a double
-                                what_to_print += std::to_string(double_variables[var_name]);
-                            }
-                            // Check if the variable is a boolean
-                            else if (variable_type == "bool")
-                            {
-                                // The variable is a boolean
-                                if (bool_variables[words[current_index]])
-                                {
-                                    what_to_print += "true";
-                                }
-                                else
-                                {
-                                    what_to_print += "false";
-                                }
-                            }
-                            // Check if the variable is an integer
-                            else if (variable_type == "int")
-                            {
-                                // The variable is an integer
-                                what_to_print += std::to_string(int_variables[var_name]);
-                            }
-                        }
-                        // Check if the next word is a string
-                        else if (words[current_index][0] == '"' || words[current_index][0] == '\'')
-                        {
-                            what_to_print += words[current_index].substr(1, words[current_index].size() - 2);
-                        }
-                        current_index++;
+                        what_to_print += words[current_index].substr(1, words[current_index].size() - 2);
                     }
-                    // Print the what_to_print variable
-                    std::cout << what_to_print << std::endl;
+                    current_index++;
                 }
-                else if (words[i] == "input")
+                // Print the what_to_print variable
+                std::cout << what_to_print << std::endl;
+            }
+            else if (words[i] == "input")
+            {
+                // Get the prompt, which is the next word.
+                std::string prompt = words[i + 1].substr(1, words[i + 1].size() - 2);
+                // Get the variable name, which is the word after the prompt.
+                std::string variable_name = words[i + 2];
+
+                // Print the prompt.
+                std::cout << prompt << std::endl;
+
+                // Get the input.
+                std::string input;
+                std::cin >> input;
+
+                // Check if the input is a number.
+                if (check_is_number(input))
                 {
-                    // Get the prompt, which is the next word.
-                    std::string prompt = words[i + 1].substr(1, words[i + 1].size() - 2);
-                    // Get the variable name, which is the word after the prompt.
-                    std::string variable_name = words[i + 2];
-
-                    // Print the prompt.
-                    std::cout << prompt << std::endl;
-
-                    // Get the input.
-                    std::string input;
-                    std::cin >> input;
-
-                    // Check if the input is a number.
-                    if (check_is_number(input))
+                    // The input is a number, so we need to convert it to a number.
+                    // Check if the input is an integer.
+                    if (input.find('.') == std::string::npos)
                     {
-                        // The input is a number, so we need to convert it to a number.
-                        // Check if the input is an integer.
-                        if (input.find('.') == std::string::npos)
-                        {
-                            // The input is an integer.
-                            int input_int = std::stoi(input);
-                            int_variables[variable_name] = input_int;
-                        }
-                        else
-                        {
-                            // The input is a double.
-                            double_variables[variable_name] = std::stod(input);
-                        }
+                        // The input is an integer.
+                        int input_int = std::stoi(input);
+                        int_variables[variable_name] = input_int;
                     }
                     else
                     {
-                        // Store string in memory
-                        string_variables[variable_name] = input;
+                        // The input is a double.
+                        double_variables[variable_name] = std::stod(input);
                     }
                 }
-                else if (words[i] == "=")
+                else
                 {
-                    std::string variable_name = words[i - 1];
-                    std::string variable_value = words[i + 1];
+                    // Store string in memory
+                    string_variables[variable_name] = input;
+                }
+            }
+            else if (words[i] == "=")
+            {
+                std::string variable_name = words[i - 1];
+                std::string variable_value = words[i + 1];
 
-                    // Check if the variable is a string
-                    std::string variable_type = check_is_variable(variable_name);
+                // Check if the variable is a string
+                std::string variable_type = get_existing_variable_name(variable_name);
 
-                    if (variable_type == "")
+                if (variable_type == "")
+                {
+                    // The variable doesn't exist, so we need to create it.
+                    std::string variable_type_new = get_type(variable_value);
+                    // Check what type the variable is
+                    if (variable_type_new == "string")
                     {
-                        // Check what type the variable is
-                        if (variable_value[0] == '"' || variable_value[0] == '\'')
-                        {
-                            // The variable is a string
-                            string_variables[variable_name] = variable_value.substr(1, variable_value.size() - 2);
-                        }
-                        else if (check_is_number(variable_value))
-                        {
-                            // The variable is a number
-                            if (variable_value.find('.') == std::string::npos)
-                            {
-                                // The variable is an integer
-                                int_variables[variable_name] = std::stoi(variable_value);
-                            }
-                            else
-                            {
-                                // The variable is a double
-                                double_variables[variable_name] = std::stod(variable_value);
-                            }
-                        }
-                        else if (variable_value == "true" || variable_value == "false")
-                        {
-                            bool_variables[variable_name] = (variable_value == "true");
-                        }
+                        // The variable is a string
+                        string_variables[variable_name] = variable_value.substr(1, variable_value.size() - 2);
+                    }
+                    else if (variable_type_new == "double")
+                    {
+                        // The variable is a double
+                        double_variables[variable_name] = std::stod(variable_value);
+                    }
+                    else if (variable_type_new == "int")
+                    {
+                        // The variable is an integer
+                        int_variables[variable_name] = std::stoi(variable_value);
+                    }
+                    else if (variable_value == "true" || variable_value == "false")
+                    {
+                        bool_variables[variable_name] = (variable_value == "true");
                     }
                 }
             }
