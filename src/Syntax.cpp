@@ -284,7 +284,7 @@ public:
 
                 // Check if -n was provided, if yes add a std::endl to the prompt
                 bool add_new_line = false;
-                if (words[i + 2] == "-n")
+                if (words[i + 4] == "-n")
                 {
                     add_new_line = true;
                 }
@@ -294,7 +294,7 @@ public:
                 {
                     if (add_new_line)
                     {
-                        std::cout << prompt << std::endl;
+                        std::cout << prompt << '\n';
                     }
                     else
                     {
