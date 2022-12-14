@@ -4,6 +4,7 @@
 #include <map>
 #include <array>
 #include <string>
+#include <sstream>
 
 class Syntax
 {
@@ -27,6 +28,24 @@ public:
 
     // Map of integer variables
     std::map<std::string, int> int_variables;
+
+    // Function to split code, start is : and end is :end
+    std::string split_code(std::string code)
+    {
+        // Get the code between the : and :end
+        std::string code_between = code.substr(code.find(":") + 1, code.find(":end") - code.find(":") - 1);
+
+        return code_between;
+    }
+
+    // Function to get the condition of an if statement
+    std::string get_condition(std::string code)
+    {
+        // Get the condition between the ( and )
+        std::string condition = code.substr(code.find("(") + 1, code.find(")") - code.find("(") - 1);
+
+        return condition;
+    }
 
     template <typename T>
     bool check_is_number(T arg)
@@ -92,6 +111,61 @@ public:
         }
     }
 
+    bool check_condition(std::string condition)
+    {
+        // Function to check whether a condition in string format is true
+        // Replace variables starting with $ with their values
+        for (int j = 0; j < condition.size(); j++)
+        {
+            if (condition[j] == '$' && condition[j - 1] != '\\')
+            {
+                // Get the variable name
+                std::string variable_name = "";
+                int k = j + 1;
+                while (condition[k] != ' ' && k < condition.size())
+                {
+                    variable_name += condition[k];
+                    k++;
+                }
+
+                std::string variable_type = get_existing_variable_type(variable_name);
+
+                // Check if the variable exists
+                if (variable_type == "string")
+                {
+                    // Replace the variable with the value of the variable
+                    condition.replace(j, variable_name.size() + 1, string_variables[variable_name]);
+                }
+                else if (variable_type == "double")
+                {
+                    // Replace the variable with the value of the variable
+                    condition.replace(j, variable_name.size() + 1, std::to_string(double_variables[variable_name]));
+                }
+                else if (variable_type == "int")
+                {
+                    // Replace the variable with the value of the variable
+                    condition.replace(j, variable_name.size() + 1, std::to_string(int_variables[variable_name]));
+                }
+                else if (variable_type == "bool")
+                {
+                    // Replace the variable with the value of the variable
+                    condition.replace(j, variable_name.size() + 1, std::to_string(bool_variables[variable_name]));
+                }
+            }
+        }
+
+        std::istringstream stream(condition);
+        bool result;
+        if (stream >> std::boolalpha >> result)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     void parse(std::string source_code)
     {
         // This function is used to parse the source code.
@@ -144,6 +218,46 @@ public:
                     // We are in a string, so add the character to the current string.
                     current_string += source_code[i];
                 }
+            }
+            else if (source_code[i] == '(' || source_code[i] == ')')
+            {
+                // Add everything between the ( and ) to the words vector.
+                std::string word_between = source_code.substr(source_code.find("(") + 1, source_code.find(")") - source_code.find("(") - 1);
+                words.push_back(word_between);
+                i = source_code.find(")");
+            }
+            else if (source_code[i] == '\'')
+            {
+                // Check if the current string is empty, if yes, then we are starting a string.
+                if (current_string == "")
+                {
+                    current_string = "\'";
+                }
+                else
+                {
+                    // We are ending a string.
+                    current_string += "\'";
+                    words.push_back(current_string);
+                    current_string = "";
+                }
+            }
+            else if (source_code[i] == '\\')
+            {
+                // Check if the current string is empty, if yes, then we are not in a string.
+                if (current_string == "")
+                {
+                    // We are not in a string, so add the character to the word.
+                    word += source_code[i];
+                }
+                else
+                {
+                    // We are in a string, so add the character to the current string.
+                    current_string += source_code[i];
+                }
+
+                // Add the next character to the current string.
+                current_string += source_code[i + 1];
+                i++;
             }
             else
             {
@@ -361,6 +475,31 @@ public:
                     {
                         bool_variables[variable_name] = (variable_value == "true");
                     }
+                }
+            }
+            else if (words[i] == "if")
+            {
+                // Get everything from between the parentheses
+                std::string condition = words[i + 1];
+
+                // Check if condition is true
+                if (check_condition(condition) == true)
+                {
+                    // Condition is true, so we need to execute the code inside the if statement.
+                    // Get the code inside
+                    std::string code_inside = "";
+                    int j = i + 3;
+                    while (words[j] != "}")
+                    {
+                        if (words[j] == "{")
+                        {
+                            continue;
+                        }
+                        code_inside += words[j] + " ";
+                        j++;
+                    }
+                    // Execute the code inside
+                    this->parse(code_inside);
                 }
             }
         }
