@@ -164,7 +164,7 @@ public:
         // Search for a print statement
         for (int i = 0; i < words.size(); i++)
         {
-            if (words[i] == "output")
+            if (words[i] == "print")
             {
                 std::string what_to_print = "";
 

@@ -2,4 +2,4 @@
 
 input name -p "What is your name? " -n
 input age -p "How old are you? " -n
-output "$name is $age years old."
+print "$name is $age years old."
