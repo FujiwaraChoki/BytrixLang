@@ -174,7 +174,7 @@ public:
                 // Loop through what_to_print and check if a word begins with a $, and replace it accoringly.
                 for (int j = 0; j < what_to_print.size(); j++)
                 {
-                    if (what_to_print[j] == '$')
+                    if (what_to_print[j] == '$' && what_to_print[j - 1] != '\\')
                     {
                         // Get the variable name
                         std::string variable_name = "";
