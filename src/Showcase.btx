@@ -1,7 +1,2 @@
-/* Showcase of Bytrix's Usage */
-
-/* Add a -p to specify your prompt (optional) */
-/* Add a -n to add a newline (optional) */
-input name -p "What is your name? " -n
-input age -p "How old are you? "
-print "$name is $age years old."
+input name -p "What is your name? "
+print "Hello $name , how are you?"
