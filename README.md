@@ -30,6 +30,23 @@ bytrix <file name>
 2. Move binary to your `/usr/local/bin` folder.
 3. Run `chmod +x /usr/local/bin/bytrix` to make it executable.
 
+## Compile from source
+
+1. Clone the repository
+```bash
+git clone https://github.com/FujiwaraChoki/BytrixLang.git
+```
+
+2. Go to the source folder
+```bash
+cd BytrixLang/src
+```
+
+3. Compile
+```bash
+clang++ Bytrix.cpp -o bytrix
+```
+
 ## Examples
 
 ### Hello World
