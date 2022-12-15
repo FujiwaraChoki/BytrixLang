@@ -5,6 +5,8 @@
 #include <array>
 #include <string>
 #include <sstream>
+#include <cmath>
+#include <../include/exprtk.hpp>
 
 class Syntax
 {
@@ -154,9 +156,20 @@ public:
             }
         }
 
-        std::istringstream stream(condition);
-        bool result;
-        if (stream >> std::boolalpha >> result)
+        // Check if the condition is true
+        // Create a symbol table and a parser
+        exprtk::symbol_table<double> symbol_table;
+        exprtk::parser<double> parser;
+
+        // Parse the expression
+        exprtk::expression<double> expression;
+        expression.register_symbol_table(symbol_table);
+        parser.compile(condition, expression);
+
+        // Evaluate the expression
+        double result = expression.value();
+
+        if (result == 1)
         {
             return true;
         }
@@ -324,8 +337,8 @@ public:
                         }
                         else
                         {
-                            // The variable does not exist.
-                            throw new InvalidVariableReferenceError(variable_name);
+                            // The variable does not exist. Throw InvalidVariableReferenceError
+                            throw InvalidVariableReferenceError(variable_name);
                         }
                     }
                 }
