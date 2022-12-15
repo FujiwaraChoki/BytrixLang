@@ -43,7 +43,7 @@ cd BytrixLang/src
 ```
 
 3. Compile
-```bash
+```
 clang++ Bytrix.cpp -o bytrix
 ```
 
@@ -51,14 +51,14 @@ clang++ Bytrix.cpp -o bytrix
 
 ### Hello World
 
-```bytrix
+```python
 /* Hello World in Bytrix */
 print "Hello World"
 ```
 
 ### Ask user their name and output it
 
-```bytrix
+```python
 /* Ask user their name and output it */
 input name -p "What is your name? "
 print "Hello $name! Nice to meet you!"
