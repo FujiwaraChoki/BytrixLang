@@ -1,7 +1,8 @@
+input name -p "Name:" -n
 input age -p "Age:" -n
 
 if ($age > 18) {
-    print "You are an adult."
+    print "$name is an adult."
 } else {
-    print "You are a minor."
+    print "$name is a minor."
 }
