@@ -50,7 +50,7 @@ std::string filter(std::string source_code)
 
 int main(int argc, const char **args)
 {
-	BytrixNot::Info("Bytrix Interpreter v0.0.1\n");
+	BytrixNot::Info("Bytrix Interpreter v0.0.3\n");
 	Syntax syntax;
 	std::string source_code;
 	std::string file_name = args[1];
