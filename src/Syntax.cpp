@@ -5,6 +5,8 @@
 #include <array>
 #include <string>
 #include <sstream>
+#include <cmath>
+#include "../include/exprtk.hpp"
 
 class Syntax
 {
@@ -154,9 +156,20 @@ public:
             }
         }
 
-        std::istringstream stream(condition);
-        bool result;
-        if (stream >> std::boolalpha >> result)
+        // Check if the condition is true
+        // Create a symbol table and a parser
+        exprtk::symbol_table<double> symbol_table;
+        exprtk::parser<double> parser;
+
+        // Parse the expression
+        exprtk::expression<double> expression;
+        expression.register_symbol_table(symbol_table);
+        parser.compile(condition, expression);
+
+        // Evaluate the expression
+        double result = expression.value();
+
+        if (result == 1)
         {
             return true;
         }
@@ -324,8 +337,8 @@ public:
                         }
                         else
                         {
-                            // The variable does not exist.
-                            throw new InvalidVariableReferenceError(variable_name);
+                            // The variable does not exist. Throw InvalidVariableReferenceError
+                            throw InvalidVariableReferenceError(variable_name);
                         }
                     }
                 }
@@ -482,31 +495,73 @@ public:
                 // Get everything from between the parentheses
                 std::string condition = words[i + 1];
 
+                bool condition_is_true = check_condition(condition);
+
                 // Check if condition is true
-                if (check_condition(condition) == true)
+                if (condition_is_true)
                 {
-                    // Condition is true, so we need to execute the code inside the if statement.
-                    // Get the code inside
+                    // Execute the code inside the if statement
                     std::string code_inside = "";
-                    int j = i + 3;
-                    while (words[j] != "}")
+                    i = i + 2;
+                    while (words[i] != "}")
                     {
-                        if (words[j] == "{")
-                        {
-                            continue;
-                        }
-                        code_inside += words[j] + " ";
-                        j++;
+                        code_inside += words[i] + " ";
+                        i++;
                     }
-                    // Execute the code inside
+
+                    // Skip the }
+                    i++;
+
+                    // Remove first two characters
+                    code_inside = code_inside.substr(2, code_inside.size() - 2);
+
                     this->parse(code_inside);
+
+                    // Set condition_is_true to false
+                    condition_is_true = false;
+
+                    // Check if there is an else statement
+                    if (words[i] == "else")
+                    {
+                        while (words[i] != "}")
+                        {
+                            i++;
+                        }
+                    }
+                }
+                else
+                {
+                    // Keep going until we find an }
+                    while (words[i] != "}")
+                    {
+                        i++;
+                    }
+
+                    // Skip the }
+                    i++;
+
+                    // Check if there is an else statement
+                    if (words[i] == "else")
+                    {
+                        // Execute the code inside the else statement
+                        std::string code_inside = "";
+                        i = i + 2;
+                        while (words[i] != "}")
+                        {
+                            code_inside += words[i] + " ";
+                            i++;
+                        }
+
+                        this->parse(code_inside);
+                    }
                 }
             }
         }
     }
 
     // Print out all variables.
-    void print_variables()
+    void
+    print_variables()
     {
         // Print out all string variables.
         for (auto it = string_variables.begin(); it != string_variables.end(); it++)

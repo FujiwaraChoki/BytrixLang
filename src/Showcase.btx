@@ -1,7 +1,7 @@
-/* Showcase of Bytrix's Usage */
+input age -p "Age:" -n
 
-/* Add a -p to specify your prompt (optional) */
-/* Add a -n to add a newline (optional) */
-input name -p "What is your name? " -n
-input age -p "How old are you? "
-print "$name is $age years old."
+if ($age > 18) {
+    print "You are an adult."
+} else {
+    print "You are a minor."
+}
