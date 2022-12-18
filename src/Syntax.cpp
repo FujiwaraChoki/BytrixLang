@@ -520,8 +520,15 @@ public:
                     // Set condition_is_true to false
                     condition_is_true = false;
 
-                    // Check if there is an else statement
+                    // Check if there is an else statement or an elif statement
                     if (words[i] == "else")
+                    {
+                        while (words[i] != "}")
+                        {
+                            i++;
+                        }
+                    }
+                    else if (words[i] == "elif")
                     {
                         while (words[i] != "}")
                         {
@@ -554,14 +561,44 @@ public:
 
                         this->parse(code_inside);
                     }
+                    else if (words[i] == "elif")
+                    {
+                        // Execute the code inside the else statement if the condition is true
+                        std::string condition = words[i + 1];
+                        std::string code_inside = "";
+                        i = i + 2;
+                        while (words[i] != "}")
+                        {
+                            code_inside += words[i] + " ";
+                            i++;
+                        }
+                        // Skip the }
+                        i++;
+                        // Remove first two characters
+                        code_inside = code_inside.substr(2, code_inside.size() - 2);
+                        // Check if the condition is true
+                        bool condition_is_true = check_condition(condition);
+                        // Check if condition is true
+                        if (condition_is_true)
+                        {
+                            this->parse(code_inside);
+                        }
+                        else
+                        {
+                            // Keep going until we find an }
+                            while (words[i] != "}")
+                            {
+                                i++;
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
     // Print out all variables.
-    void
-    print_variables()
+    void print_variables()
     {
         // Print out all string variables.
         for (auto it = string_variables.begin(); it != string_variables.end(); it++)
