@@ -48,19 +48,53 @@ std::string filter(std::string source_code)
 	return source_code;
 }
 
+std::string filter_c(std::string source_code)
+{
+	// Seperate the code by ;
+	std::string filtered_code;
+	for (int i = 0; i < source_code.length(); i++)
+	{
+		if (source_code[i] == ';')
+		{
+			filtered_code.push_back(source_code[i]);
+			filtered_code.push_back('\n');
+		}
+		else
+		{
+			filtered_code.push_back(source_code[i]);
+		}
+	}
+	return filtered_code;
+}
+
 int main(int argc, const char **args)
 {
 	BytrixNot::Info("Bytrix Interpreter v0.0.3\n");
 	Syntax syntax;
 	std::string source_code;
 	std::string file_name = args[1];
-	bool file_exists = check_file(file_name);
-	if (file_exists == false)
+	if (file_name == "-c")
 	{
-		throw FileNotFoundError(file_name);
+		// Run the code directly
+		source_code = filter_c(args[2]);
+	}
+	else if (file_name == "-h")
+	{
+		// Show the help
+		BytrixNot::Info("Bytrix Interpreter v0.0.3\n");
+		BytrixNot::Info("Usage: bytrix [file_name] | bytrix -c [code] | bytrix -h\n");
 		return 0;
 	}
-	source_code = get_file_contents(file_name);
+	else
+	{
+		bool file_exists = check_file(file_name);
+		if (file_exists == false)
+		{
+			throw FileNotFoundError(file_name);
+			return 0;
+		}
+		source_code = get_file_contents(file_name);
+	}
 
 	// Filter the source_code
 	source_code = filter(source_code);
