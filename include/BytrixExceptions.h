@@ -55,3 +55,12 @@ public:
 		BytrixNot::Error("InvalidVariableReferenceError: " + variable + " is not a valid variable.");
 	}
 };
+
+class UndefinedFunctionError
+{
+public:
+	UndefinedFunctionError(std::string function)
+	{
+		BytrixNot::Error("UndefinedFunctionError: " + function + " is not defined.");
+	}
+};

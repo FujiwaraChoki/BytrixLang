@@ -31,6 +31,9 @@ public:
     // Map of integer variables
     std::map<std::string, int> int_variables;
 
+    // Map of the functions
+    std::map<std::string, std::string> functions;
+
     // Function to split code, start is : and end is :end
     std::string split_code(std::string code)
     {
@@ -528,13 +531,6 @@ public:
                             i++;
                         }
                     }
-                    else if (words[i] == "elif")
-                    {
-                        while (words[i] != "}")
-                        {
-                            i++;
-                        }
-                    }
                 }
                 else
                 {
@@ -561,37 +557,45 @@ public:
 
                         this->parse(code_inside);
                     }
-                    else if (words[i] == "elif")
-                    {
-                        // Execute the code inside the else statement if the condition is true
-                        std::string condition = words[i + 1];
-                        std::string code_inside = "";
-                        i = i + 2;
-                        while (words[i] != "}")
-                        {
-                            code_inside += words[i] + " ";
-                            i++;
-                        }
-                        // Skip the }
-                        i++;
-                        // Remove first two characters
-                        code_inside = code_inside.substr(2, code_inside.size() - 2);
-                        // Check if the condition is true
-                        bool condition_is_true = check_condition(condition);
-                        // Check if condition is true
-                        if (condition_is_true)
-                        {
-                            this->parse(code_inside);
-                        }
-                        else
-                        {
-                            // Keep going until we find an }
-                            while (words[i] != "}")
-                            {
-                                i++;
-                            }
-                        }
-                    }
+                }
+            }
+            // Check if the word ends with a :, if it does, skip until we find
+            // "end", and add everything inside to a variable, then add the variable
+            // to functions
+            else if (words[i].find(":") != std::string::npos)
+            {
+                std::cout << "Found function" << std::endl;
+                // Get the function name
+                std::string function_name = words[i].substr(0, words[i].size() - 1);
+                // Get the code inside the function
+                std::string code_inside = "";
+                i = i + 1;
+                while (words[i] != "end")
+                {
+                    code_inside += words[i] + " ";
+                    i++;
+                }
+                // Remove last two characters
+                code_inside = code_inside.substr(0, code_inside.size() - 2);
+
+                std::cout << "1: " << function_name << std::endl;
+
+                // Add the function to the functions map
+                functions[function_name] = code_inside;
+
+                continue;
+            }
+            else
+            {
+                // If word ends with a (), then it is a function
+                if (words[i].find("()") != std::string::npos)
+                {
+                    // Get the function name
+                    std::string function_name = words[i].substr(0, words[i].size() - 2);
+                    // Get the code inside the function
+                    std::string code_inside = functions[function_name];
+                    // Parse the code inside the function
+                    this->parse(code_inside);
                 }
             }
         }
@@ -603,25 +607,25 @@ public:
         // Print out all string variables.
         for (auto it = string_variables.begin(); it != string_variables.end(); it++)
         {
-            std::cout << it->first << " = " << it->second << std::endl;
+            std::cout << it->first << " => " << it->second << std::endl;
         }
 
         // Print out all double variables.
         for (auto it = double_variables.begin(); it != double_variables.end(); it++)
         {
-            std::cout << it->first << " = " << it->second << std::endl;
+            std::cout << it->first << " => " << it->second << std::endl;
         }
 
         // Print out all int variables.
         for (auto it = int_variables.begin(); it != int_variables.end(); it++)
         {
-            std::cout << it->first << " = " << it->second << std::endl;
+            std::cout << it->first << " => " << it->second << std::endl;
         }
 
         // Print out all bool variables.
         for (auto it = bool_variables.begin(); it != bool_variables.end(); it++)
         {
-            std::cout << it->first << " = " << it->second << std::endl;
+            std::cout << it->first << " => " << it->second << std::endl;
         }
     }
 };
