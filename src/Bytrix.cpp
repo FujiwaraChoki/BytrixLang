@@ -1,12 +1,13 @@
 /*
-The Interpreter for the Bytrix programming language
+The Interpreter for the Bytrix programming language.
 Author: Sami Hindi
-Version: 0.0.1
+Version: 0.0.4
+License: MIT
 */
-#include <iostream>
-#include <fstream>
 #include <string>
-#include "../include/BytrixExceptions.h"
+#include <fstream>
+#include <iostream>
+
 #include "Syntax.cpp"
 
 bool check_file(std::string file_name)
@@ -69,7 +70,7 @@ std::string filter_c(std::string source_code)
 
 int main(int argc, const char **args)
 {
-	BytrixNot::Info("Bytrix Interpreter v0.0.3\n");
+	BytrixNot::Info("Bytrix Interpreter v0.0.4\n");
 	Syntax syntax;
 	std::string source_code;
 	std::string file_name = args[1];
@@ -81,7 +82,6 @@ int main(int argc, const char **args)
 	else if (file_name == "-h")
 	{
 		// Show the help
-		BytrixNot::Info("Bytrix Interpreter v0.0.3\n");
 		BytrixNot::Info("Usage: bytrix [file_name] | bytrix -c [code] | bytrix -h\n");
 		return 0;
 	}

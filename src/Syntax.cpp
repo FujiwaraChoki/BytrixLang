@@ -1,12 +1,13 @@
-#include <string>
-#include <iostream>
-#include <vector>
 #include <map>
+#include <cmath>
 #include <array>
+#include <vector>
 #include <string>
 #include <sstream>
-#include <cmath>
-#include "../include/exprtk.hpp"
+#include <iostream>
+
+#include "exprtk.hpp"
+#include "BytrixExceptions.h"
 
 class Syntax
 {
@@ -559,12 +560,12 @@ public:
                     }
                 }
             }
+
             // Check if the word ends with a :, if it does, skip until we find
             // "end", and add everything inside to a variable, then add the variable
             // to functions
             else if (words[i].find(":") != std::string::npos)
             {
-                std::cout << "Found function" << std::endl;
                 // Get the function name
                 std::string function_name = words[i].substr(0, words[i].size() - 1);
                 // Get the code inside the function
@@ -576,9 +577,7 @@ public:
                     i++;
                 }
                 // Remove last two characters
-                code_inside = code_inside.substr(0, code_inside.size() - 2);
-
-                std::cout << "1: " << function_name << std::endl;
+                code_inside = code_inside.substr(0, code_inside.size() - 1);
 
                 // Add the function to the functions map
                 functions[function_name] = code_inside;
@@ -587,14 +586,13 @@ public:
             }
             else
             {
-                // If word ends with a (), then it is a function
-                if (words[i].find("()") != std::string::npos)
+                // Check if the word is a function
+                if (functions.find(words[i]) != functions.end())
                 {
-                    // Get the function name
-                    std::string function_name = words[i].substr(0, words[i].size() - 2);
                     // Get the code inside the function
-                    std::string code_inside = functions[function_name];
-                    // Parse the code inside the function
+                    std::string code_inside = functions[words[i]];
+                    // std::cout << code_inside << std::endl;
+                    //  Parse the code inside the function
                     this->parse(code_inside);
                 }
             }

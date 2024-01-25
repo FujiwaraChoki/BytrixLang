@@ -374,4 +374,5 @@ FodyWeavers.xsd
 *.gitattributes
 *test*.*
 a.???
-Bytrix
+Bytrix.???
+.history

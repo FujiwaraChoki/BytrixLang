@@ -1,7 +1,5 @@
-input name -p "What is your age?" -n
+print_name:
+    print "Hello World!"
+end
 
-if ( $name > 25 ) {
-    print "You are an adult"
-} else {
-    print "You are a teenager"
-}
+print_name()
